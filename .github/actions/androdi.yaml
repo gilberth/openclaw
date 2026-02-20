@@ -1,0 +1,44 @@
+name: Build OpenClaw Android APK
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'apps/android/**'
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'apps/android/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    # Definimos el directorio de trabajo base para los comandos del runner
+    defaults:
+      run:
+        working-directory: ./apps/android
+
+    steps:
+    - name: Checkout del repositorio
+      uses: actions/checkout@v4
+
+    - name: Configurar JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Otorgar permisos a gradlew
+      run: chmod +x gradlew
+
+    - name: Compilar APK de Debug
+      run: ./gradlew assembleDebug
+
+    - name: Subir APK generado
+      uses: actions/upload-artifact@v4
+      with:
+        name: openclaw-android-debug
+        # La ruta del artefacto debe especificarse desde la raíz del repositorio
+        path: apps/android/app/build/outputs/apk/debug/app-debug.apk
