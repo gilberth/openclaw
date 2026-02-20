@@ -35,9 +35,8 @@ jobs:
 
     - name: Bajar minSdkVersion a API 29 (Moto G7 Power)
       run: |
-        sed -i.bak 's/minSdk = [0-9]*/minSdk = 29/g' app/build.gradle.kts 2>/dev/null || true
-        sed -i.bak 's/minSdkVersion [0-9]*/minSdkVersion 29/g' app/build.gradle 2>/dev/null || true
-        sed -i.bak 's/minSdk [0-9]*/minSdk 29/g' app/build.gradle.kts 2>/dev/null || true
+        sed -i.bak -E 's/minSdk[[:space:]]*=[[:space:]]*[0-9]+/minSdk = 29/g' app/build.gradle.kts 2>/dev/null || true
+        sed -i.bak -E 's/minSdkVersion[[:space:]]*[0-9]+/minSdkVersion 29/g' app/build.gradle 2>/dev/null || true
 
     - name: Compilar APK de Debug
       run: ./gradlew assembleDebug
